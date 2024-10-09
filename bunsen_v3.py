@@ -14,13 +14,19 @@ ipAddress = "172.29.208.119"
 port = 1883
 topic_beaker = "robot/beaker"
 topic_bunsen = "robot/bunsen"
-has_dice = True
+has_dice = False
 gripper_closed = False  # Beaker starts with an open gripper
 
 # ip address to connect to robot
+<<<<<<< Updated upstream
 # drive_path_bunsen = "172.29.208.123"  # bunsen
 # crx10_bunsen = rc.robot(drive_path_bunsen)
 # crx10_bunsen.set_speed(200)
+=======
+drive_path_bunsen = "172.29.208.123"  # bunsen
+crx10_bunsen = rc.robot(drive_path_bunsen)
+crx10_bunsen.set_speed(200)
+>>>>>>> Stashed changes
 
 handoff_count = 0
 max_handoffs = 7  # Can be 7-10 times
@@ -83,6 +89,7 @@ def on_message(client, userdata, message):
         # Beaker sent its location, Bunsen moves to that location
         location = message_json["location"]
         print(f"Bunsen moving to meet Beaker at location: {location}")
+
         gripper_closed = True  # Bunsen closes gripper to receive dice
         send_gripper_status(
             client, topic_bunsen, "bunsen", gripper_closed

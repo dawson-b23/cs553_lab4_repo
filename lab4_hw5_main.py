@@ -91,14 +91,14 @@ def beaker_pass2_bunsen(mid_beak_cart_arr, mid_bun_offset_arr, bun_safe_offset_a
     prev_bun_cart_arr = np.array(prev_bun_cart_list)
     rand_pos_cart_arr = np.array(rand_pos_cart)
     new_rand_beak_cart_arr = mid_beak_cart_arr - rand_pos_cart_arr
-    crx10_bunsen.write_cartesian_position(prev_bun_cart_arr + bun_safe_offset_arr)
+    #crx10_bunsen.write_cartesian_position(prev_bun_cart_arr + bun_safe_offset_arr)
     crx10_beaker.write_cartesian_position(new_rand_beak_cart_arr)
-    crx10_bunsen.write_cartesian_position(new_rand_beak_cart_arr + mid_bun_offset_arr + bun_safe_offset_arr)
-    crx10_bunsen.write_cartesian_position(new_rand_beak_cart_arr + mid_bun_offset_arr)
-    crx10_bunsen.schunk_gripper("close")
-    time.sleep(0.5)
-    crx10_beaker.schunk_gripper("open")
-    time.sleep(0.5)
+    #crx10_bunsen.write_cartesian_position(new_rand_beak_cart_arr + mid_bun_offset_arr + bun_safe_offset_arr)
+    #crx10_bunsen.write_cartesian_position(new_rand_beak_cart_arr + mid_bun_offset_arr)
+    #crx10_bunsen.schunk_gripper("close")
+    #time.sleep(0.5)
+    #crx10_beaker.schunk_gripper("open")
+    #time.sleep(0.5)
 
 def bunsen_take_beaker():
     crx10_bunsen.write_cartesian_position(prev_bun_cart_arr + bun_safe_offset_arr)
