@@ -16,8 +16,8 @@ gripper_closed = False  # Beaker starts with an open gripper
 
 # ip address to connect to robot
 drive_path_beaker = "172.29.208.124"  # beaker
-crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
-crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
+# crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
+# crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
 
 
 handoff_count = 0

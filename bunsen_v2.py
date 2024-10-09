@@ -14,9 +14,9 @@ topic_bunsen = "robot/bunsen"
 
 # ip address to connect to robot
 # ip address to connect to robot
-drive_path_bunsen = "172.29.208.123"
-crx10_bunsen = rc.robot(drive_path_bunsen)
-crx10_bunsen.set_speed(200)
+# drive_path_bunsen = "172.29.208.123"
+# crx10_bunsen = rc.robot(drive_path_bunsen)
+# crx10_bunsen.set_speed(200)
 
 
 def get_random_location():
