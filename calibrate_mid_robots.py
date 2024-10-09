@@ -21,8 +21,10 @@ def main():
     mid_bun_cart = [446.390, -1133.883, 362.92, 89.691, -61.141, -1.357]
     beak_safe_offset_arr = np.array([0, -300, 0, 0, 0, 0])
     bun_safe_offset_arr = np.array([0, 300, 0, 0, 0, 0])
-    mid_beak_cart_arr = np.array(Mid_beak_cart)
-    mid_bun_cart_arr = np.array(Mid_bun_cart)
+    mid_beak_cart_arr = np.array(mid_beak_cart)
+    mid_bun_cart_arr = np.array(mid_bun_cart)
     crx10_beaker.write_cartesian_position(mid_beak_cart_arr)
     crx10_bunsen.write_cartesian_position(mid_bun_cart_arr + bun_safe_offset_arr)
     crx10_bunsen.write_cartesian_position(mid_bun_cart_arr)
+
+main()
