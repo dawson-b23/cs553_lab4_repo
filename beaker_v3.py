@@ -1,16 +1,18 @@
 import json
 import random
+import time
 from datetime import datetime
 
+import numpy as np
 import paho.mqtt.client as mqtt
 
 import robot_controller as rc
 
 ## Globals
-#Dawson IP
-#ipAddress = "172.29.208.119"
-#Levi IP
-ipAddress = "172.29.208.20"
+# Dawson IP
+ipAddress = "172.29.208.119"
+# Levi IP
+# ipAddress = "172.29.208.20"
 port = 1883
 topic_beaker = "robot/beaker"
 topic_bunsen = "robot/bunsen"
@@ -19,34 +21,64 @@ gripper_closed = False  # Beaker starts with an open gripper
 
 # ip address to connect to robot
 drive_path_beaker = "172.29.208.124"  # beaker
-<<<<<<< Updated upstream
-# crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
-# crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
-=======
-#crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
-#crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
->>>>>>> Stashed changes
+crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
+crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
 
 
 handoff_count = 0
 max_handoffs = 7  # Can be 7-10 times
 
 
+home_beak_joint = [0, 0, 0, 0, -90, 30]
+dice_cart_beak = [474, -2.7, -181.07, 179.6, -1.15, 31.13]
+dice_cart_beak_offset = [474, -2.7, 0, 179.6, -1.15, 31.13]
+Mid_beak_cart = [441.644, 1093.283, 372.238, 89.043, -59.973, -179.287]
+Mid_bun_cart = [446.390, -1133.883, 362.92, 89.691, -61.141, -1.357]
+beak_safe_offset_arr = np.array([0, -300, 0, 0, 0, 0])
+bun_safe_offset_arr = np.array([0, 300, 0, 0, 0, 0])
+
+mid_beak_cart_arr = np.array(Mid_beak_cart)
+mid_bun_cart_arr = np.array(Mid_bun_cart)
+mid_beak_offset_arr = mid_beak_cart_arr - mid_bun_cart_arr
+mid_bun_offset_arr = mid_bun_cart_arr - mid_beak_cart_arr
+
+
 def rand_arr():
     rand_cart = []
     n = 3
     for i in range(n):
-        rand_cart.append(random.randint(0, 150))
+        rand_cart.append(random.randint(-150, 150))
     for i in range(n):
         rand_cart.append(0)
 
+    rand_cart = np.array(rand_cart)
     return rand_cart
 
 
-# will replace
-def get_random_location():
-    # Generate a random location for the robot to move to.
-    return {"x": random.randint(0, 10), "y": random.randint(0, 10)}
+def home_joint(home_beak_joint):
+    # Homing Beaker and Bunsen
+    print("HOMING Beaker and Bunsen")
+    crx10_beaker.write_joint_pose(home_beak_joint)
+
+
+def open_grippers():
+    # Open Beaker and Bunsen Grippers
+    print("Opening Gripper Tools")
+    crx10_beaker.schunk_gripper("open")
+
+
+def dice_beak_pickup(dice_cart_beak, dice_cart_beak_offset):
+    # Beaker moving to dice cart coords and picking up dice
+    print("Beaker picking up die")
+    crx10_beaker.write_cartesian_position(dice_cart_beak_offset)
+    crx10_beaker.write_cartesian_position(dice_cart_beak)
+    crx10_beaker.schunk_gripper("close")
+    gripper_closed = True
+    time.sleep(0.5)
+
+
+def beaker_pass_to_bunsen(rand_arr):
+    crx10_beaker.write_cartesian_position(mid_beak_cart_arr - rand_arr)
 
 
 def get_utc_timestamp():
@@ -58,7 +90,7 @@ def send_location(client, publish_topic, robot_name, location):
     # Send the location and gripper status to the other robot.
     message = {
         "robot": robot_name,
-        "location": location,
+        "location": location.tolist(),
         "timestamp": get_utc_timestamp(),
         "gripper_closed": False,  # Initially open when moving
     }
@@ -95,6 +127,7 @@ def on_message(client, userdata, message):
         # Bunsen sent a location
         location = message_json["location"]
         print(f"Beaker moving to meet Bunsen at location: {location}")
+
         send_gripper_status(
             client, topic_beaker, "beaker", True
         )  # Beaker signals it's closing gripper
@@ -107,7 +140,7 @@ def on_message(client, userdata, message):
         else:
             handoff_count += 1
             has_dice = True  # Beaker takes the dice again
-            location = get_random_location()
+            location = rand_arr()
             send_location(client, topic_beaker, "beaker", location)
             gripper_closed = False  # Gripper is open again to release dice
 
@@ -124,11 +157,15 @@ def main_beaker():
     client.on_connect = on_connect
     client.on_message = on_message
 
+    home_joint(home_beak_joint)
+    open_grippers()
+    dice_beak_pickup(dice_cart_beak, dice_cart_beak_offset)
     client.connect(ipAddress, port)
 
     # Beaker picks up the dice and moves to the first location
-    location = get_random_location()
-    #send_location(client, topic_beaker, "beaker", location)
+    location = rand_arr()
+    beaker_pass_to_bunsen(location)
+    send_location(client, topic_beaker, "beaker", location)
 
     client.loop_forever()
 
