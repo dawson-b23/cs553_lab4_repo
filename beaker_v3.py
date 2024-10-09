@@ -7,7 +7,10 @@ import paho.mqtt.client as mqtt
 import robot_controller as rc
 
 ## Globals
-ipAddress = "172.29.208.119"
+#Dawson IP
+#ipAddress = "172.29.208.119"
+#Levi IP
+ipAddress = "172.29.208.20"
 port = 1883
 topic_beaker = "robot/beaker"
 topic_bunsen = "robot/bunsen"
@@ -16,8 +19,13 @@ gripper_closed = False  # Beaker starts with an open gripper
 
 # ip address to connect to robot
 drive_path_beaker = "172.29.208.124"  # beaker
+<<<<<<< Updated upstream
 # crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
 # crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
+=======
+#crx10_beaker = rc.robot(drive_path_beaker)  # set/connect to beaker robot
+#crx10_beaker.set_speed(200)  # set robot move speed to 200 mm/s
+>>>>>>> Stashed changes
 
 
 handoff_count = 0
@@ -120,7 +128,7 @@ def main_beaker():
 
     # Beaker picks up the dice and moves to the first location
     location = get_random_location()
-    send_location(client, topic_beaker, "beaker", location)
+    #send_location(client, topic_beaker, "beaker", location)
 
     client.loop_forever()
 

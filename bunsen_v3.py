@@ -7,7 +7,10 @@ import paho.mqtt.client as mqtt
 import robot_controller as rc
 
 # Globals
+#Dawson IP
 ipAddress = "172.29.208.119"
+#Levi IP
+#ipAddress = "192.168.1.120"
 port = 1883
 topic_beaker = "robot/beaker"
 topic_bunsen = "robot/bunsen"
@@ -15,9 +18,9 @@ has_dice = True
 gripper_closed = False  # Beaker starts with an open gripper
 
 # ip address to connect to robot
-drive_path_bunsen = "172.29.208.123"  # bunsen
-crx10_bunsen = rc.robot(drive_path_bunsen)
-crx10_bunsen.set_speed(200)
+#drive_path_bunsen = "172.29.208.123"  # bunsen
+#crx10_bunsen = rc.robot(drive_path_bunsen)
+#crx10_bunsen.set_speed(200)
 
 handoff_count = 0
 max_handoffs = 7  # Can be 7-10 times
