@@ -9,10 +9,7 @@ import paho.mqtt.client as mqtt
 import robot_controller as rc
 
 ## Globals
-# Dawson IP
 ipAddress = "172.29.208.119"
-# Levi IP
-# ipAddress = "172.29.208.20"
 port = 1883
 topic_beaker = "robot/beaker"
 topic_bunsen = "robot/bunsen"
@@ -26,7 +23,7 @@ crx10_beaker.set_speed(300)  # set robot move speed to 200 mm/s
 
 
 handoff_count = 0
-max_handoffs = 6 # Can be 7-10 times
+max_handoffs = 6  # Can be 7-10 times
 
 
 home_beak_joint = [0, 0, 0, 0, -90, 30]
@@ -166,8 +163,7 @@ def on_message(client, userdata, message):
             put_dice_down()
             print("Program done, goodbye!")
             return
-            
-            
+
         print("Bun open grip. Beak take dice and move")
         location = rand_arr()
         beaker_pass_to_bunsen(location)
